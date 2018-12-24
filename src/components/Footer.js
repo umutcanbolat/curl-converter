@@ -14,8 +14,8 @@ export class Footer extends Component {
 
         return (
             <StyledFooter>
-                <footer class="page-footer font-small blue">
-                    <div class="footer-copyright text-center py-3">{(new Date()).getFullYear()} - Designed and developed by <a href="https://github.com/umutcanbolat/">umutcanbolat</a>
+                <footer className="page-footer font-small blue">
+                    <div className="footer-copyright text-center py-3">{(new Date()).getFullYear()} - Designed and developed by <a href="https://github.com/umutcanbolat/">umutcanbolat</a>
                     </div>
                 </footer>
             </StyledFooter>
