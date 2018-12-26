@@ -11,7 +11,7 @@ export class TopMenu extends Component {
                         <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
                         Curl Converter
                     </Menu.Item>
-                    <Menu.Item as='a'>Home</Menu.Item>
+                    <Menu.Item as='a' href='./'>Home</Menu.Item>
 
                     <Dropdown item simple text='Dropdown'>
                         <Dropdown.Menu>
