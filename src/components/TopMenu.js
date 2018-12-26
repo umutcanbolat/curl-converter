@@ -7,7 +7,7 @@ export class TopMenu extends Component {
         return (
             <Menu fixed='top' inverted>
                 <Container>
-                    <Menu.Item as='a' header>
+                    <Menu.Item as='a' href='./' header>
                         <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
                         Curl Converter
                     </Menu.Item>
@@ -30,7 +30,7 @@ export class TopMenu extends Component {
                             <Dropdown.Item>List Item</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <Menu.Item as='a' position='right'>Github Repo</Menu.Item>
+                    <Menu.Item as='a' href='https://github.com/umutcanbolat/curl-converter' position='right'>GitHub Repo</Menu.Item>
                 </Container>
             </Menu>
         );
