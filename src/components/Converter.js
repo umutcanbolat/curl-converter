@@ -14,7 +14,10 @@ export class Converter extends Component {
         super(props);
         this.state = {
             curl: "",
-            convertedCurl: ""
+            convertedCurl: "",
+            method: "get",
+            headers: [],
+            url: ""
         }
 
         this.inputChanged = this.inputChanged.bind(this);
@@ -43,8 +46,14 @@ export class Converter extends Component {
         }
         
     }
+    
+    parseCurl(){
+        var args = stringArgv(this.state.curl);
+    }
 
     validateCurl(){
+        var headers = [];
+
         var args = stringArgv(this.state.curl);
         if(args[0] != 'curl'){
             return false;
@@ -54,7 +63,7 @@ export class Converter extends Component {
         while(i < args.length){
             if(args[i] == '-H'){
                 if(i+1 <= args.length-1){
-                    
+                    headers.push(args[i+1]);
                     i+=2;
                     continue;
                 }else{
@@ -62,9 +71,15 @@ export class Converter extends Component {
                     return false;
                 }
             }else if(/^[a-z0-9]+$/i.test(args[i].charAt(0))){
-                hasUrl = true;
-                i++;
-                continue;
+                if(hasUrl==false){
+                    this.setState({
+                        url: args[i]
+                    });
+                    hasUrl = true;
+                    i++;
+                    continue;
+                }
+                
             }
             i++;
         }
@@ -73,8 +88,14 @@ export class Converter extends Component {
             return false;
         }
 
-        console.log(args);
-        console.log(args.length);
+        this.setState({
+            headers: headers
+        }, () => {
+            console.log(this.state.headers);
+            console.log(this.state.url);
+        });
+
+        
         return true;
     }
 
