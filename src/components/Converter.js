@@ -31,13 +31,34 @@ export class Converter extends Component {
         e.preventDefault();
         this.setState({
             curl: e.target.value
-        }, this.convertCurl);
+        }, this.validateCurl);
     }
 
     convertCurl(){
-        if(this.validateCurl()){
+        if(true){
+            console.log("test:");
+            console.log(this.state.url)
+            let headers = this.state.headers.map(header => {
+                var hdr = header.split(': ');
+                return '.addHeader("'+ hdr[0] +'", "'+ hdr[1] +'")';
+            });
+            let curlString = 'OkHttpClient client = new OkHttpClient();' +
+
+            'Request request = new Request.Builder()' +
+              '.url("' + this.state.url + '")' +
+              '.get()';
+              for(let i= 0 ; i<headers.length ; i++){
+                  curlString += headers[i];
+              }
+              curlString +=
+              '.build();' +
+              'Response response = client.newCall(request).execute();';
+
+
+
+            console.log(curlString);
             this.setState({
-                convertedCurl: this.state.curl
+                convertedCurl: curlString
             });
 
         }else{
@@ -97,9 +118,7 @@ export class Converter extends Component {
                         i++;
                         continue;
                     }
-                    
                 }
-    
                 i++;
             }
     
@@ -116,6 +135,7 @@ export class Converter extends Component {
                 console.log(this.state.url);
                 console.log(this.state.method);
                 console.log(this.state.data);
+                this.convertCurl();
             });
     
             
@@ -139,7 +159,7 @@ export class Converter extends Component {
                             </Form>
                         </Grid.Column>
                         <Grid.Column>
-                            <Segment>{this.state.convertedCurl}</Segment>
+                            <Segment><pre>{this.state.convertedCurl}</pre></Segment>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
