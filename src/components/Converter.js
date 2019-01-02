@@ -17,6 +17,7 @@ export class Converter extends Component {
             convertedCurl: "",
             method: "get",
             headers: [],
+            data: [],
             url: ""
         }
 
@@ -52,51 +53,77 @@ export class Converter extends Component {
     }
 
     validateCurl(){
-        var headers = [];
-
-        var args = stringArgv(this.state.curl);
-        if(args[0] != 'curl'){
-            return false;
-        }
-
-        var i=1, hasUrl=false;
-        while(i < args.length){
-            if(args[i] == '-H'){
-                if(i+1 <= args.length-1){
-                    headers.push(args[i+1]);
-                    i+=2;
-                    continue;
-                }else{
-                    // no header parameter found after option '-H'
-                    return false;
-                }
-            }else if(/^[a-z0-9]+$/i.test(args[i].charAt(0))){
-                if(hasUrl==false){
-                    this.setState({
-                        url: args[i]
-                    });
-                    hasUrl = true;
-                    i++;
-                    continue;
-                }
-                
+        try {
+            var args = stringArgv(this.state.curl);
+            if(args[0] != 'curl'){
+                return false;
             }
-            i++;
-        }
-
-        if(!hasUrl){
+    
+            let i=1, hasUrl=false;
+            let headers = [];
+            let method = "GET";
+            let data = [];
+    
+            while(i < args.length){
+                // if args[i] is an option
+                if(args[i].startsWith('-')){
+                    // if args[i] has a parameter
+                    if(i+1 < args.length){
+                        switch(args[i]){
+                            case '-H':
+                                headers.push(args[i+1]);
+                                i+=2;
+                                continue;
+                            case '--data':
+                            case '-d':
+                                method = 'POST';
+                                data.push(args[i+1]);
+                                i+=2;
+                                continue;
+                            case '-X':
+                                method = args[i+1];
+                                i+=2;
+                                continue;
+                            default:
+                                break;
+                        }
+                    }
+                }else if(/^[a-z0-9]+$/i.test(args[i].charAt(0))){
+                    if(hasUrl==false){
+                        this.setState({
+                            url: args[i]
+                        });
+                        hasUrl = true;
+                        i++;
+                        continue;
+                    }
+                    
+                }
+    
+                i++;
+            }
+    
+            if(!hasUrl){
+                return false;
+            }
+    
+            this.setState({
+                headers: headers,
+                method: method,
+                data: data
+            }, () => {
+                console.log(this.state.headers);
+                console.log(this.state.url);
+                console.log(this.state.method);
+                console.log(this.state.data);
+            });
+    
+            
+            return true;
+        }catch(e){
             return false;
         }
-
-        this.setState({
-            headers: headers
-        }, () => {
-            console.log(this.state.headers);
-            console.log(this.state.url);
-        });
-
         
-        return true;
     }
 
 
